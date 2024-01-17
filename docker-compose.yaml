@@ -1,0 +1,7 @@
+version: '3'
+services: 
+  winemate.catalog.app:
+    container_name: "winemate.catalog.app"
+    build: ./WineMate.Catalog/.
+    ports:
+      - "8100:8080"
