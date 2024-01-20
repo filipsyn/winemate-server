@@ -1,13 +1,13 @@
 version: '3'
 services: 
   winemate.catalog.app:
-    container_name: "winemate.catalog.app"
+    container_name: "winemate-catalog-app"
     build: ./WineMate.Catalog/.
     ports:
       - "8100:8080"
   
   winemate.catalog.database:
-    container_name: "winemate.catalog.database"
+    container_name: "winemate-catalog-database"
     image: postgres:alpine
     environment:
       - POSTGRES_USER=superuser
