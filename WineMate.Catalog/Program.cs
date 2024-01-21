@@ -31,7 +31,7 @@ if (app.Environment.IsDevelopment())
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 
-app.MapGet("/", () => Results.Ok())
+app.MapGet("/", () => Results.Ok("Sanity check"))
     .WithName("Sanity check")
     .WithOpenApi();
 
