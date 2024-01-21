@@ -1,3 +1,5 @@
+using Carter;
+
 using HealthChecks.UI.Client;
 
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -18,6 +20,8 @@ builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(typeof(Program).Assembly);
 });
+
+builder.Services.AddCarter();
 
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("Database") ??
@@ -47,5 +51,7 @@ app.MapHealthChecks("_health", new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
+
+app.MapCarter();
 
 app.Run();
