@@ -1,7 +1,26 @@
 version: '3'
 services: 
   winemate.catalog.app:
-    container_name: "winemate.catalog.app"
-    build: ./WineMate.Catalog/.
+    container_name: "winemate-catalog-app"
+    build: 
+      context: .
+      dockerfile: WineMate.Catalog/Dockerfile
     ports:
       - "8100:8080"
+    depends_on:
+      - winemate.catalog.database
+  
+  winemate.catalog.database:
+    container_name: "winemate-catalog-database"
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=superuser
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=winemate_catalog
+    ports:
+        - "8110:5432"
+    volumes:
+      - .containers/winemate.catalog.database/data:/var/lib/postgresql/data    
+
+volumes:
+  winemate.catalog.database:
