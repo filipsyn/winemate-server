@@ -43,8 +43,4 @@ app.MapHealthChecks("_health", new HealthCheckOptions
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
-app.MapGet("/", () => Results.Ok("Sanity check"))
-    .WithName("Sanity check")
-    .WithOpenApi();
-
 app.Run();
