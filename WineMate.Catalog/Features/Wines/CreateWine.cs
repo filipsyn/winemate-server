@@ -63,7 +63,9 @@ public class CreateWineEndpoint : ICarterModule
 
                 return TypedResults.Created($"/wines/{wineId}", response);
             })
+            .WithOpenApi()
             .WithName("CreateWine")
+            .WithSummary("Create Wine")
             .WithDescription("Creates a new wine")
             .WithTags("Wines");
     }
