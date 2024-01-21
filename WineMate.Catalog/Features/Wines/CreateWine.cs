@@ -56,7 +56,12 @@ public class CreateWineEndpoint : ICarterModule
 
                 var wineId = await sender.Send(command);
 
-                return TypedResults.Created($"/wines/{wineId}", wineId);
+                var response = new CreateWineResponse
+                {
+                    WineId = wineId
+                };
+
+                return TypedResults.Created($"/wines/{wineId}", response);
             })
             .WithName("CreateWine")
             .WithDescription("Creates a new wine")
