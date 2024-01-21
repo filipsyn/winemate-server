@@ -7,6 +7,8 @@ services:
       dockerfile: WineMate.Catalog/Dockerfile
     ports:
       - "8100:8080"
+    depends_on:
+      - winemate.catalog.database
   
   winemate.catalog.database:
     container_name: "winemate-catalog-database"
@@ -18,9 +20,7 @@ services:
     ports:
         - "8110:5432"
     volumes:
-      - .containers/winemate.catalog.database/data:/var/lib/postgresql/data
-    depends_on: 
-      - winemate.catalog.app
+      - .containers/winemate.catalog.database/data:/var/lib/postgresql/data    
 
 volumes:
   winemate.catalog.database:
