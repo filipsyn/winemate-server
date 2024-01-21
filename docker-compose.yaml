@@ -2,7 +2,9 @@ version: '3'
 services: 
   winemate.catalog.app:
     container_name: "winemate-catalog-app"
-    build: ./WineMate.Catalog/.
+    build: 
+      context: .
+      dockerfile: WineMate.Catalog/Dockerfile
     ports:
       - "8100:8080"
   
