@@ -6,6 +6,8 @@ using FluentValidation;
 
 using HealthChecks.UI.Client;
 
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,6 +45,9 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 );
 
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddFluentValidationRulesToSwagger();
+
 builder.Services.AddSwaggerGen();
 
 builder.Host.UseSerilog((context, configuration) =>
