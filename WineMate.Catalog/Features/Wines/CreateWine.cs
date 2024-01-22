@@ -8,6 +8,7 @@ using Mapster;
 
 using MediatR;
 
+using WineMate.Catalog.Configuration;
 using WineMate.Catalog.Contracts;
 using WineMate.Catalog.Database;
 using WineMate.Catalog.Database.Entities;
@@ -30,7 +31,18 @@ public static class CreateWine
         public Validator()
         {
             RuleFor(x => x.Name).NotEmpty();
-            RuleFor(x => x.Year).InclusiveBetween(1800, DateTime.UtcNow.Year);
+
+            RuleFor(x => x.Description)
+                .NotEqual(string.Empty)
+                .When(x => x.Description != null);
+
+            RuleFor(x => x.Year)
+                .NotEmpty()
+                .InclusiveBetween(Constants.MinimalAllowedYear, DateTime.UtcNow.Year);
+
+            RuleFor(x => x.Type)
+                .NotEmpty()
+                .IsInEnum();
         }
     }
 
