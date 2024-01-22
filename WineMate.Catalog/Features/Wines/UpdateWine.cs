@@ -87,7 +87,7 @@ public class UpdateWineEndpoint : ICarterModule
             )
             .WithOpenApi()
             .WithName("UpdateWine")
-            .WithSummary("Update  Wine")
+            .WithSummary("Update Wine")
             .WithDescription("Updates a wine.")
             .WithTags("Wines");
     }
