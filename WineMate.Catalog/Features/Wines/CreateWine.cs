@@ -76,8 +76,18 @@ public class CreateWineEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost("/wines", async (CreateWineRequest request, ISender sender) =>
+        app.MapPost("/wines", async (
+                CreateWineRequest request,
+                IValidator<CreateWineRequest> validator,
+                ISender sender) =>
             {
+                var validationResult = await validator.ValidateAsync(request);
+                if (!validationResult.IsValid)
+                {
+                    return Results.ValidationProblem(validationResult.ToDictionary());
+                }
+
+
                 var command = request.Adapt<CreateWine.Command>();
 
                 var result = await sender.Send(command);
