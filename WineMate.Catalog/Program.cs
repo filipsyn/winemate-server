@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 using Carter;
 
 using FluentValidation;
@@ -32,6 +34,13 @@ builder.Services.AddCarter();
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("Database") ??
                throw new InvalidOperationException("Database connection string is not configured."));
+
+builder.Services.ConfigureHttpJsonOptions(options =>
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter())
+);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
