@@ -81,17 +81,11 @@ public class CreateWineEndpoint : ICarterModule
                 var command = request.Adapt<CreateWine.Command>();
 
                 var result = await sender.Send(command);
-                if (result.IsError)
-                {
-                    return Results.BadRequest(result.FirstError.ToResponse());
-                }
 
-                var response = new CreateWineResponse
-                {
-                    WineId = result.Value
-                };
-
-                return Results.Created($"/wines/{response.WineId}", response);
+                return result.MatchFirst(
+                    wineId => Results.Created($"/wines/{wineId}", new CreateWineResponse { WineId = wineId }),
+                    error => error.ToResponse()
+                );
             })
             .WithOpenApi()
             .WithName("CreateWine")
