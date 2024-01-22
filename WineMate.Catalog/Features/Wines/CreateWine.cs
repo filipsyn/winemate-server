@@ -19,9 +19,9 @@ public static class CreateWine
 {
     public class Command : IRequest<ErrorOr<Guid>>
     {
-        public required string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
-        public required int Year { get; set; }
+        public int Year { get; set; }
         public WineType Type { get; set; } = WineType.Other;
     }
 
