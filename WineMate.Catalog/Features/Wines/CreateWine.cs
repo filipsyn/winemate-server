@@ -11,6 +11,7 @@ using MediatR;
 using WineMate.Catalog.Contracts;
 using WineMate.Catalog.Database;
 using WineMate.Catalog.Database.Entities;
+using WineMate.Catalog.Extensions;
 
 namespace WineMate.Catalog.Features.Wines;
 
@@ -82,7 +83,7 @@ public class CreateWineEndpoint : ICarterModule
                 var result = await sender.Send(command);
                 if (result.IsError)
                 {
-                    return Results.BadRequest(result.Errors);
+                    return Results.BadRequest(result.FirstError.ToResponse());
                 }
 
                 var response = new CreateWineResponse
