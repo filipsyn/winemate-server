@@ -73,8 +73,19 @@ public class UpdateWineEndpoint : ICarterModule
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapPut("/wines/{id}",
-                async (Guid id, UpdateWineRequest request, ISender sender) =>
+                async (
+                    Guid id,
+                    UpdateWineRequest request,
+                    IValidator<UpdateWineRequest> validator,
+                    ISender sender
+                ) =>
                 {
+                    var validationResult = await validator.ValidateAsync(request);
+                    if (!validationResult.IsValid)
+                    {
+                        return Results.ValidationProblem(validationResult.ToDictionary());
+                    }
+
                     var command = request.Adapt<UpdateWine.Command>();
                     command.Id = id;
 
