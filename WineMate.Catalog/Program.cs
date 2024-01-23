@@ -10,6 +10,7 @@ using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 using Serilog;
 
@@ -48,7 +49,20 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddFluentValidationRulesToSwagger();
 
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1",
+        new OpenApiInfo
+        {
+            Title = "WineMate.Catalog",
+            Version = "v1",
+            Description = "Service for managing wines and wine makers.",
+            Contact = new OpenApiContact
+            {
+                Url = new Uri("https://github.com/filipsyn/winemate-server")
+            }
+        });
+});
 
 builder.Host.UseSerilog((context, configuration) =>
 {
