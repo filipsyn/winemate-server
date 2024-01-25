@@ -6,19 +6,7 @@ public static class ErrorExtensions
 {
     public static IResult ToResponse(this Error error)
     {
-        var statusCode = GetStatusCode(error);
-        var title = GetTitle(error);
-        var type = GetType(error);
-
-        return Results.Problem(
-            statusCode: statusCode,
-            title: title,
-            type: type,
-            extensions: new Dictionary<string, object?>
-            {
-                ["errors"] = new { Title = error.Code, Detail = error.Description }
-            }
-        );
+        return ToResponse(new List<Error> { error });
     }
 
     public static IResult ToResponse(this List<Error> errors)
