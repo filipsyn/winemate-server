@@ -15,6 +15,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 
 using WineMate.Catalog.Database;
+using WineMate.Catalog.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,6 +65,9 @@ builder.Services.AddSwaggerGen(options =>
         });
 });
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 builder.Host.UseSerilog((context, configuration) =>
 {
     configuration.ReadFrom.Configuration(context.Configuration);
@@ -81,6 +85,7 @@ app.UseSwaggerUI(options =>
 });
 
 app.UseSerilogRequestLogging();
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
 app.MapHealthChecks("_health", new HealthCheckOptions
