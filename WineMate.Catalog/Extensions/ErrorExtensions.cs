@@ -21,6 +21,25 @@ public static class ErrorExtensions
         );
     }
 
+    public static IResult ToResponse(this List<Error> errors)
+    {
+        var firstError = errors[0];
+
+        var statusCode = GetStatusCode(firstError);
+        var title = GetTitle(firstError);
+        var type = GetType(firstError);
+
+        return Results.Problem(
+            statusCode: statusCode,
+            title: title,
+            type: type,
+            extensions: new Dictionary<string, object?>
+            {
+                ["errors"] = errors.Select(error => new { Title = error.Code, Detail = error.Description })
+            }
+        );
+    }
+
     private static int GetStatusCode(Error error)
     {
         return error.Type switch
