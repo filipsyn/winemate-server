@@ -24,6 +24,7 @@ public static class CreateWine
         public string? Description { get; set; }
         public int Year { get; set; }
         public WineType Type { get; set; } = WineType.Other;
+        public Guid WineMakerId { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -43,6 +44,9 @@ public static class CreateWine
             RuleFor(x => x.Type)
                 .NotEmpty()
                 .IsInEnum();
+
+            RuleFor(x => x.WineMakerId)
+                .NotEmpty();
         }
     }
 
@@ -72,7 +76,8 @@ public static class CreateWine
                 Description = request.Description,
                 Year = request.Year,
                 Type = request.Type,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                WineMakerId = request.WineMakerId
             };
 
             _dbContext.Wines.Add(wine);
