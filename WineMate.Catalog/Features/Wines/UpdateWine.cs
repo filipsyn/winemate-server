@@ -25,6 +25,7 @@ public static class UpdateWine
         public string? Description { get; set; } = null;
         public int Year { get; set; }
         public WineType Type { get; set; } = WineType.Other;
+        public Guid WineMakerId { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -44,6 +45,9 @@ public static class UpdateWine
             RuleFor(x => x.Type)
                 .NotEmpty()
                 .IsInEnum();
+
+            RuleFor(x => x.WineMakerId)
+                .NotEmpty();
         }
     }
 
