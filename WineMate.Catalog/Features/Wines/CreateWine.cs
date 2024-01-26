@@ -99,7 +99,6 @@ public class CreateWineEndpoint : ICarterModule
                     return Results.ValidationProblem(validationResult.ToDictionary());
                 }
 
-
                 var command = request.Adapt<CreateWine.Command>();
 
                 var result = await sender.Send(command);
