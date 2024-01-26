@@ -8,6 +8,8 @@ using Mapster;
 
 using MediatR;
 
+using Microsoft.EntityFrameworkCore;
+
 using WineMate.Catalog.Configuration;
 using WineMate.Catalog.Contracts;
 using WineMate.Catalog.Database;
@@ -70,6 +72,17 @@ public static class UpdateWine
             {
                 _logger.LogWarning("Wine with id {Id} not found", request.Id);
                 return Error.Failure(nameof(UpdateWine), $"Wine with id {request.Id} not found.");
+            }
+
+            var winemaker = await _dbContext.WineMakers
+                .FirstOrDefaultAsync(maker => maker.Id == request.WineMakerId, cancellationToken);
+
+            if (winemaker is null)
+            {
+                _logger.LogWarning("Can't update wine {Id}; Wine maker with id {WineMakerId} not found",
+                    request.Id,
+                    request.WineMakerId);
+                return Error.Failure(nameof(UpdateWine), $"Wine maker with id {request.WineMakerId} not found.");
             }
 
             wine.Name = request.Name;
