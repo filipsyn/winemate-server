@@ -94,7 +94,7 @@ public class CreateWineMakerEndpoint : ICarterModule
             })
             .WithOpenApi()
             .WithName("CreateWineMaker")
-            .WithSummary("Creates wine maker")
+            .WithSummary("Create wine maker")
             .WithDescription("Creates a new wine maker.")
             .WithTags("WineMakers");
     }
