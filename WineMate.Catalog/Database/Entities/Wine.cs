@@ -6,6 +6,8 @@ public class Wine : BaseEntity
     public string? Description { get; set; } = null;
     public required int Year { get; set; }
     public WineType Type { get; set; } = WineType.Other;
+    public Guid WineMakerId { get; set; }
+    public WineMaker? WineMaker { get; set; }
 }
 
 public enum WineType

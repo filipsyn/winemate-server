@@ -11,6 +11,11 @@ public class WineMakerConfiguration : IEntityTypeConfiguration<WineMaker>
     {
         builder.HasKey(wineMaker => wineMaker.Id);
 
+        builder.HasMany<Wine>(maker => maker.Wines)
+            .WithOne(wine => wine.WineMaker)
+            .HasForeignKey(wine => wine.WineMakerId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.OwnsOne(wineMaker => wineMaker.Address);
     }
 }
