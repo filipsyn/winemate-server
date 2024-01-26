@@ -58,7 +58,7 @@ public class GetWineEndpoint : ICarterModule
                 var result = await sender.Send(query);
 
                 return result.MatchFirst(
-                    wine => TypedResults.Ok(wine),
+                    TypedResults.Ok,
                     error => Results.NotFound(error.ToResponse())
                 );
             })
