@@ -72,7 +72,7 @@ public static class UpdateWine
             if (wine is null)
             {
                 _logger.LogWarning("Wine with id {Id} not found", request.Id);
-                return Error.Failure(nameof(UpdateWine), $"Wine with id {request.Id} not found.");
+                return Error.NotFound(nameof(UpdateWine), $"Wine with id {request.Id} not found.");
             }
 
             var winemaker = await _dbContext.WineMakers
