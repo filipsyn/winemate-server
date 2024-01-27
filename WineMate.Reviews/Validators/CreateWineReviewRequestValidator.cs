@@ -1,6 +1,7 @@
 using FluentValidation;
 
 using WineMate.Contracts.Api;
+using WineMate.Reviews.Configuration;
 
 namespace WineMate.Reviews.Validators;
 
@@ -20,6 +21,6 @@ public class CreateWineReviewRequestValidator : AbstractValidator<CreateWineRevi
 
         RuleFor(x => x.Rating)
             .NotEmpty()
-            .InclusiveBetween(0, 10);
+            .InclusiveBetween(Constants.MinimumRating, Constants.MaximumRating);
     }
 }
