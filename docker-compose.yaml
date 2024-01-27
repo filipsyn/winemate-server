@@ -49,3 +49,14 @@ services:
     volumes:
       - .containers/winemate.reviews.database/data:/var/lib/postgresql/data
       
+  winemate.rabbitmq:
+    container_name: "winemate-rabbitmq"
+    image: rabbitmq:management
+    ports:
+      - "9100:15672"
+    volumes:
+      - .containers/winemate.rabbitmq/data:/var/lib/rabbitmq
+      - .containers/winemate.rabbitmq/logs:/var/log/rabbitmq
+    environment:
+        - RABBITMQ_DEFAULT_USER=guest
+        - RABBITMQ_DEFAULT_PASS=guest

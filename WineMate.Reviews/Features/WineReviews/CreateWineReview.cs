@@ -6,9 +6,12 @@ using FluentValidation;
 
 using Mapster;
 
+using MassTransit;
+
 using MediatR;
 
 using WineMate.Contracts.Api;
+using WineMate.Contracts.Messages;
 using WineMate.Reviews.Configuration;
 using WineMate.Reviews.Database;
 using WineMate.Reviews.Database.Entities;
@@ -46,13 +49,16 @@ public static class CreateWineReview
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<Handler> _logger;
+        private readonly IRequestClient<GetWineStatusRequest> _requestClient;
         private readonly IValidator<Command> _validator;
 
-        public Handler(ApplicationDbContext dbContext, IValidator<Command> validator, ILogger<Handler> logger)
+        public Handler(ApplicationDbContext dbContext, IValidator<Command> validator, ILogger<Handler> logger,
+            IRequestClient<GetWineStatusRequest> requestClient)
         {
             _dbContext = dbContext;
             _validator = validator;
             _logger = logger;
+            _requestClient = requestClient;
         }
 
         public async Task<ErrorOr<Guid>> Handle(Command request, CancellationToken cancellationToken)
@@ -63,6 +69,18 @@ public static class CreateWineReview
                 _logger.LogWarning("Can't log review; Validation Failed: {ValidationResult}",
                     validationResult.ToString());
                 return Error.Validation(nameof(CreateWineReview), validationResult.ToString() ?? "Validation failed");
+            }
+
+            var wineStatusResponse = await _requestClient.GetResponse<GetWineStatusResponse>(
+                new GetWineStatusRequest { WineId = request.WineId },
+                cancellationToken);
+
+            _logger.LogDebug("Wine status response: {WineStatusResponse}", wineStatusResponse.Message);
+
+            if (!wineStatusResponse.Message.Exists)
+            {
+                _logger.LogWarning("Can't create wine review; Wine with id {WineId} not found", request.WineId);
+                return Error.NotFound(nameof(CreateWineReview), $"Wine with id {request.WineId} not found");
             }
 
             var wineReview = new WineReview

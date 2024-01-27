@@ -6,6 +6,8 @@ using FluentValidation;
 
 using HealthChecks.UI.Client;
 
+using MassTransit;
+
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -25,6 +27,21 @@ builder.Services.AddProblemDetails();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database"));
+});
+
+builder.Services.AddMassTransit(busConfigurator =>
+{
+    busConfigurator.SetKebabCaseEndpointNameFormatter();
+    busConfigurator.UsingRabbitMq((context, configurator) =>
+    {
+        configurator.Host(new Uri(builder.Configuration["MessageBroker:Host"]!), host =>
+        {
+            host.Username(builder.Configuration["MessageBroker:Username"]!);
+            host.Password(builder.Configuration["MessageBroker:Password"]!);
+        });
+
+        configurator.ConfigureEndpoints(context);
+    });
 });
 
 builder.Host.UseSerilog((context, configuration) =>

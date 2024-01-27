@@ -6,11 +6,14 @@ using FluentValidation;
 
 using Mapster;
 
+using MassTransit;
+
 using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
 using WineMate.Contracts.Api;
+using WineMate.Contracts.Messages;
 using WineMate.Reviews.Configuration;
 using WineMate.Reviews.Database;
 using WineMate.Reviews.Extensions;
@@ -48,16 +51,20 @@ public static class UpdateWineReview
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<Handler> _logger;
+        private readonly IRequestClient<GetWineStatusRequest> _requestClient;
         private readonly IValidator<Command> _validator;
 
         public Handler(
             ApplicationDbContext dbContext,
             IValidator<Command> validator,
-            ILogger<Handler> logger)
+            ILogger<Handler> logger,
+            IRequestClient<GetWineStatusRequest> requestClient
+        )
         {
             _dbContext = dbContext;
             _validator = validator;
             _logger = logger;
+            _requestClient = requestClient;
         }
 
         public async Task<ErrorOr<UpdateWineReviewResponse>> Handle(Command request,
@@ -78,6 +85,16 @@ public static class UpdateWineReview
             {
                 _logger.LogWarning("Cannot update review with id {Id}, not found", request.Id);
                 return Error.NotFound(nameof(UpdateWineReview), $"Review with id {request.Id} not found.");
+            }
+
+            var wineStatusResponse = await _requestClient.GetResponse<GetWineStatusResponse>(
+                new GetWineStatusRequest { WineId = request.WineId },
+                cancellationToken);
+
+            if (!wineStatusResponse.Message.Exists)
+            {
+                _logger.LogWarning("Can't update wine review; Wine with id {WineId} not found", request.WineId);
+                return Error.NotFound(nameof(UpdateWineReview), $"Wine with id {request.WineId} not found");
             }
 
             review.WineId = request.WineId;

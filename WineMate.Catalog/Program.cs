@@ -6,6 +6,8 @@ using FluentValidation;
 
 using HealthChecks.UI.Client;
 
+using MassTransit;
+
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -15,6 +17,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 
 using WineMate.Catalog.Database;
+using WineMate.Catalog.Features.Wines;
 using WineMate.Catalog.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,6 +48,24 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.Services.AddControllers().AddJsonOptions(options =>
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter())
 );
+
+builder.Services.AddMassTransit(busConfigurator =>
+{
+    busConfigurator.SetKebabCaseEndpointNameFormatter();
+
+    busConfigurator.AddConsumer<GetWineStatusConsumer>();
+
+    busConfigurator.UsingRabbitMq((context, configurator) =>
+    {
+        configurator.Host(new Uri(builder.Configuration["MessageBroker:Host"]!), host =>
+        {
+            host.Username(builder.Configuration["MessageBroker:Username"]!);
+            host.Password(builder.Configuration["MessageBroker:Password"]!);
+        });
+
+        configurator.ConfigureEndpoints(context);
+    });
+});
 
 builder.Services.AddEndpointsApiExplorer();
 
