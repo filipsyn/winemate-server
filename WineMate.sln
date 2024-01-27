@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WineMate.Reviews", "WineMat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WineMate.Contracts", "WineMate.Contracts\WineMate.Contracts.csproj", "{4A336E5A-A3F6-46D5-B5F3-8C68361C2A0C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WineMate.Gateway", "WineMate.Gateway\WineMate.Gateway.csproj", "{80A432C8-D163-412B-A95E-8EC8093E5D42}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{4A336E5A-A3F6-46D5-B5F3-8C68361C2A0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A336E5A-A3F6-46D5-B5F3-8C68361C2A0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A336E5A-A3F6-46D5-B5F3-8C68361C2A0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80A432C8-D163-412B-A95E-8EC8093E5D42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80A432C8-D163-412B-A95E-8EC8093E5D42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80A432C8-D163-412B-A95E-8EC8093E5D42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80A432C8-D163-412B-A95E-8EC8093E5D42}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
