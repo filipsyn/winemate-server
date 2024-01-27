@@ -66,7 +66,8 @@ public static class UpdateWine
 
         public async Task<ErrorOr<Guid>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var wine = await _dbContext.Wines.FindAsync(request.Id);
+            var wine = await _dbContext.Wines
+                .FirstOrDefaultAsync(wine => wine.Id == request.Id, cancellationToken);
 
             if (wine is null)
             {
