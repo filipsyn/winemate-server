@@ -1,4 +1,8 @@
 version: '3'
+
+volumes:
+  winemate.catalog.database:
+
 services: 
   winemate.catalog.app:
     container_name: "winemate-catalog-app"
@@ -21,6 +25,3 @@ services:
         - "8110:5432"
     volumes:
       - .containers/winemate.catalog.database/data:/var/lib/postgresql/data    
-
-volumes:
-  winemate.catalog.database:
