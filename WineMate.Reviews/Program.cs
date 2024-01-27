@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
 
+using FluentValidation;
+
 using HealthChecks.UI.Client;
 
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
@@ -35,6 +37,9 @@ builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(assembly);
 });
+
+builder.Services.AddValidatorsFromAssembly(assembly);
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddFluentValidationRulesToSwagger();
