@@ -2,6 +2,7 @@ using HealthChecks.UI.Client;
 
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 using Serilog;
 
@@ -21,7 +22,21 @@ builder.Host.UseSerilog((context, configuration) =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1",
+        new OpenApiInfo
+        {
+            Title = "WineMate.Reviews",
+            Version = "v1",
+            Description = "Service for managing wine reviews.",
+            Contact = new OpenApiContact
+            {
+                Url = new Uri("https://github.com/filipsyn/winemate-server")
+            }
+        });
+});
 
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("Database") ??
