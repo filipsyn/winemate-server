@@ -1,6 +1,12 @@
 using System.Text.Json.Serialization;
 
+using Carter;
+
+using FluentValidation;
+
 using HealthChecks.UI.Client;
+
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +33,21 @@ builder.Host.UseSerilog((context, configuration) =>
     configuration.WriteTo.Console();
 });
 
+var assembly = typeof(Program).Assembly;
+
+builder.Services.AddMediatR(config =>
+{
+    config.RegisterServicesFromAssembly(assembly);
+});
+
+builder.Services.AddValidatorsFromAssembly(assembly);
+
+builder.Services.AddCarter();
+
+
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddFluentValidationRulesToSwagger();
+
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -75,5 +95,7 @@ app.MapHealthChecks("_health", new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
+
+app.MapCarter();
 
 app.Run();
