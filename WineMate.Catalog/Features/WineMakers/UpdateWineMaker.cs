@@ -67,6 +67,7 @@ public static class UpdateWineMaker
             winemaker.Address.Street = request.Address.Street;
             winemaker.Address.City = request.Address.City;
             winemaker.Address.Country = request.Address.Country;
+            winemaker.UpdatedAt = DateTime.UtcNow;
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
