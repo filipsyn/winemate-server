@@ -1,3 +1,6 @@
+using HealthChecks.UI.Client;
+
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 
 using Serilog;
@@ -20,6 +23,11 @@ builder.Host.UseSerilog((context, configuration) =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("Database") ??
+               throw new InvalidOperationException("Database connection string is not configured."));
+
+
 var app = builder.Build();
 
 app.UseSwagger();
@@ -28,5 +36,10 @@ app.UseSwaggerUI();
 app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
+
+app.MapHealthChecks("_health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.Run();
