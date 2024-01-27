@@ -1,4 +1,4 @@
-namespace WineMate.Catalog.Database.Entities;
+namespace WineMate.Contracts.Common;
 
 public class Address
 {

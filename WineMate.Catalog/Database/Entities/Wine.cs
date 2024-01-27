@@ -1,3 +1,5 @@
+using WineMate.Contracts.Common;
+
 namespace WineMate.Catalog.Database.Entities;
 
 public class Wine : BaseEntity
@@ -8,15 +10,4 @@ public class Wine : BaseEntity
     public WineType Type { get; set; } = WineType.Other;
     public Guid WineMakerId { get; set; }
     public WineMaker? WineMaker { get; set; }
-}
-
-public enum WineType
-{
-    Other,
-    Red,
-    White,
-    Rose,
-    Sparkling,
-    Dessert,
-    Fortified
 }

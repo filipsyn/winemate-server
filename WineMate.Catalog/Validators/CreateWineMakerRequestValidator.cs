@@ -1,6 +1,6 @@
 using FluentValidation;
 
-using WineMate.Catalog.Contracts;
+using WineMate.Contracts.Api;
 
 namespace WineMate.Catalog.Validators;
 

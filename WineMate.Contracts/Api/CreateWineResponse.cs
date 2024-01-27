@@ -1,4 +1,4 @@
-namespace WineMate.Catalog.Contracts;
+namespace WineMate.Contracts.Api;
 
 public class CreateWineResponse
 {

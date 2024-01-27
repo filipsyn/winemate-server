@@ -1,10 +1,11 @@
-using WineMate.Catalog.Database.Entities;
+using WineMate.Contracts.Common;
 
-namespace WineMate.Catalog.Contracts;
+namespace WineMate.Contracts.Api;
 
-public class CreateWineRequest
+public class WineDetailResponse
 {
-    public string Name { get; set; } = string.Empty;
+    public Guid Id { get; set; }
+    public string? Name { get; set; }
     public string? Description { get; set; } = null;
     public int Year { get; set; }
     public WineType Type { get; set; } = WineType.Other;
