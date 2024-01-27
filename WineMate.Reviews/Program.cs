@@ -96,4 +96,6 @@ app.MapHealthChecks("_health", new HealthCheckOptions
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
+app.MapCarter();
+
 app.Run();
