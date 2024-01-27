@@ -52,6 +52,8 @@ services:
   winemate.rabbitmq:
     container_name: "winemate-rabbitmq"
     image: rabbitmq:management
+    ports:
+      - "9100:15672"
     volumes:
       - .containers/winemate.rabbitmq/data:/var/lib/rabbitmq
       - .containers/winemate.rabbitmq/logs:/var/log/rabbitmq
