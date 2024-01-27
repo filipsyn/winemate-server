@@ -29,6 +29,13 @@ builder.Host.UseSerilog((context, configuration) =>
     configuration.WriteTo.Console();
 });
 
+var assembly = typeof(Program).Assembly;
+
+builder.Services.AddMediatR(config =>
+{
+    config.RegisterServicesFromAssembly(assembly);
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddFluentValidationRulesToSwagger();
 
