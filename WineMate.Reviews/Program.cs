@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
 
+using Carter;
+
 using FluentValidation;
 
 using HealthChecks.UI.Client;
@@ -39,6 +41,8 @@ builder.Services.AddMediatR(config =>
 });
 
 builder.Services.AddValidatorsFromAssembly(assembly);
+
+builder.Services.AddCarter();
 
 
 builder.Services.AddEndpointsApiExplorer();
