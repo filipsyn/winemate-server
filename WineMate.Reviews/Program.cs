@@ -9,8 +9,12 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 
 using WineMate.Reviews.Database;
+using WineMate.Reviews.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -63,6 +67,7 @@ app.UseSwaggerUI(options =>
 });
 
 app.UseSerilogRequestLogging();
+app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
