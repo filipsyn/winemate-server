@@ -73,7 +73,7 @@ public static class CreateWine
             {
                 _logger.LogWarning("Can't create wine, validation failed: {ValidationResult}",
                     validationResult.ToString() ?? "Validation failed.");
-                return Error.Failure(nameof(CreateWine), validationResult.ToString() ?? "Validation failed.");
+                return Error.Validation(nameof(CreateWine), validationResult.ToString() ?? "Validation failed.");
             }
 
             var winemaker = await _dbContext.WineMakers
