@@ -4,6 +4,8 @@ using ErrorOr;
 
 using MediatR;
 
+using Microsoft.EntityFrameworkCore;
+
 using WineMate.Catalog.Database;
 using WineMate.Catalog.Extensions;
 
@@ -29,7 +31,9 @@ public static class DeleteWine
 
         public async Task<ErrorOr<Deleted>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var wine = await _dbContext.Wines.FindAsync(request.Id);
+            var wine = await _dbContext.Wines
+                .FirstOrDefaultAsync(wine => wine.Id == request.Id, cancellationToken);
+
             if (wine is null)
             {
                 _logger.LogWarning("Wine with id {Id} not found", request.Id);
