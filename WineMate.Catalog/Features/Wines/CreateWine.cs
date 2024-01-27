@@ -8,6 +8,8 @@ using Mapster;
 
 using MediatR;
 
+using Microsoft.EntityFrameworkCore;
+
 using WineMate.Catalog.Configuration;
 using WineMate.Catalog.Contracts;
 using WineMate.Catalog.Database;
@@ -24,6 +26,7 @@ public static class CreateWine
         public string? Description { get; set; }
         public int Year { get; set; }
         public WineType Type { get; set; } = WineType.Other;
+        public Guid WineMakerId { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -43,18 +46,23 @@ public static class CreateWine
             RuleFor(x => x.Type)
                 .NotEmpty()
                 .IsInEnum();
+
+            RuleFor(x => x.WineMakerId)
+                .NotEmpty();
         }
     }
 
     internal sealed class Handler : IRequestHandler<Command, ErrorOr<Guid>>
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly ILogger<Handler> _logger;
         private readonly IValidator<Command> _validator;
 
-        public Handler(ApplicationDbContext dbContext, IValidator<Command> validator)
+        public Handler(ApplicationDbContext dbContext, IValidator<Command> validator, ILogger<Handler> logger)
         {
             _dbContext = dbContext;
             _validator = validator;
+            _logger = logger;
         }
 
         public async Task<ErrorOr<Guid>> Handle(Command request, CancellationToken cancellationToken)
@@ -63,7 +71,18 @@ public static class CreateWine
 
             if (!validationResult.IsValid)
             {
-                return Error.Failure(nameof(CreateWine), validationResult.ToString() ?? "Validation failed.");
+                _logger.LogWarning("Can't create wine, validation failed: {ValidationResult}",
+                    validationResult.ToString() ?? "Validation failed.");
+                return Error.Validation(nameof(CreateWine), validationResult.ToString() ?? "Validation failed.");
+            }
+
+            var winemaker = await _dbContext.WineMakers
+                .FirstOrDefaultAsync(maker => maker.Id == request.WineMakerId, cancellationToken);
+
+            if (winemaker is null)
+            {
+                _logger.LogWarning("Can't create wine, wine maker with id {Id} not found", request.WineMakerId);
+                return Error.Failure(nameof(CreateWine), $"Wine maker with id {request.WineMakerId} not found.");
             }
 
             var wine = new Wine
@@ -72,7 +91,8 @@ public static class CreateWine
                 Description = request.Description,
                 Year = request.Year,
                 Type = request.Type,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                WineMakerId = request.WineMakerId
             };
 
             _dbContext.Wines.Add(wine);
@@ -98,7 +118,6 @@ public class CreateWineEndpoint : ICarterModule
                 {
                     return Results.ValidationProblem(validationResult.ToDictionary());
                 }
-
 
                 var command = request.Adapt<CreateWine.Command>();
 

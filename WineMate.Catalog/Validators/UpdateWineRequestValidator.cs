@@ -22,5 +22,8 @@ public class UpdateWineRequestValidator : AbstractValidator<UpdateWineRequest>
         RuleFor(x => x.Type)
             .NotEmpty()
             .IsInEnum();
+
+        RuleFor(x => x.WineMakerId)
+            .NotEmpty();
     }
 }

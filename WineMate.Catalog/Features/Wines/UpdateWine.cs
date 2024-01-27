@@ -8,6 +8,8 @@ using Mapster;
 
 using MediatR;
 
+using Microsoft.EntityFrameworkCore;
+
 using WineMate.Catalog.Configuration;
 using WineMate.Catalog.Contracts;
 using WineMate.Catalog.Database;
@@ -25,6 +27,7 @@ public static class UpdateWine
         public string? Description { get; set; } = null;
         public int Year { get; set; }
         public WineType Type { get; set; } = WineType.Other;
+        public Guid WineMakerId { get; set; }
     }
 
     public class Validator : AbstractValidator<Command>
@@ -44,6 +47,9 @@ public static class UpdateWine
             RuleFor(x => x.Type)
                 .NotEmpty()
                 .IsInEnum();
+
+            RuleFor(x => x.WineMakerId)
+                .NotEmpty();
         }
     }
 
@@ -60,18 +66,32 @@ public static class UpdateWine
 
         public async Task<ErrorOr<Guid>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var wine = await _dbContext.Wines.FindAsync(request.Id);
+            var wine = await _dbContext.Wines
+                .FirstOrDefaultAsync(wine => wine.Id == request.Id, cancellationToken);
 
             if (wine is null)
             {
                 _logger.LogWarning("Wine with id {Id} not found", request.Id);
-                return Error.Failure(nameof(UpdateWine), $"Wine with id {request.Id} not found.");
+                return Error.NotFound(nameof(UpdateWine), $"Wine with id {request.Id} not found.");
+            }
+
+            var winemaker = await _dbContext.WineMakers
+                .FirstOrDefaultAsync(maker => maker.Id == request.WineMakerId, cancellationToken);
+
+            if (winemaker is null)
+            {
+                _logger.LogWarning("Can't update wine {Id}; Wine maker with id {WineMakerId} not found",
+                    request.Id,
+                    request.WineMakerId);
+                return Error.Failure(nameof(UpdateWine), $"Wine maker with id {request.WineMakerId} not found.");
             }
 
             wine.Name = request.Name;
             wine.Description = request.Description;
             wine.Year = request.Year;
             wine.Type = request.Type;
+            wine.WineMakerId = request.WineMakerId;
+            wine.UpdatedAt = DateTime.UtcNow;
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 

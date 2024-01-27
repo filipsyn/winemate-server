@@ -34,7 +34,9 @@ public static class GetWine
 
         public async Task<ErrorOr<WineDetailResponse>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var wine = await _dbContext.Wines.FirstOrDefaultAsync(wine => wine.Id == request.Id, cancellationToken);
+            var wine = await _dbContext.Wines
+                .AsNoTracking()
+                .FirstOrDefaultAsync(wine => wine.Id == request.Id, cancellationToken);
 
             if (wine is null)
             {
@@ -58,7 +60,7 @@ public class GetWineEndpoint : ICarterModule
                 var result = await sender.Send(query);
 
                 return result.MatchFirst(
-                    wine => TypedResults.Ok(wine),
+                    TypedResults.Ok,
                     error => Results.NotFound(error.ToResponse())
                 );
             })

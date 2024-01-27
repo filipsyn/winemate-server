@@ -1,6 +1,9 @@
 using Carter;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
+
 using WineMate.Catalog.Contracts;
 using WineMate.Catalog.Database;
 
@@ -22,6 +25,7 @@ public static class ListWines
         public async Task<IList<WineInfoResponse>> Handle(Query request, CancellationToken cancellationToken)
         {
             var wines = await _dbContext.Wines
+                .AsNoTracking()
                 .Select(wine => new WineInfoResponse
                 {
                     Id = wine.Id,

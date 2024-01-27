@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WineMate.Catalog.Database;
@@ -11,9 +12,11 @@ using WineMate.Catalog.Database;
 namespace WineMate.Catalog.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240126161804_AddWineMakerEntity")]
+    partial class AddWineMakerEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,7 +78,7 @@ namespace WineMate.Catalog.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("WineMakers");
+                    b.ToTable("WineMaker");
                 });
 
             modelBuilder.Entity("WineMate.Catalog.Database.Entities.Wine", b =>
@@ -113,7 +116,7 @@ namespace WineMate.Catalog.Migrations
 
                             b1.HasKey("WineMakerId");
 
-                            b1.ToTable("WineMakers");
+                            b1.ToTable("WineMaker");
 
                             b1.WithOwner()
                                 .HasForeignKey("WineMakerId");
