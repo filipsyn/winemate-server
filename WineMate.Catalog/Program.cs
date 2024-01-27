@@ -17,6 +17,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 
 using WineMate.Catalog.Database;
+using WineMate.Catalog.Features.Wines;
 using WineMate.Catalog.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,6 +52,9 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.SetKebabCaseEndpointNameFormatter();
+
+    busConfigurator.AddConsumer<GetWineStatusConsumer>();
+
     busConfigurator.UsingRabbitMq((context, configurator) =>
     {
         configurator.Host(new Uri(builder.Configuration["MessageBroker:Host"]!), host =>
