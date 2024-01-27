@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -6,8 +6,6 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <UserSecretsId>ae839cb5-570e-4b66-8b32-cb4e345054be</UserSecretsId>
-        <RootNamespace>WineMate.Catalog</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,7 +16,7 @@
         <PackageReference Include="FluentValidation" Version="11.9.0"/>
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0"/>
         <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0"/>
-        <PackageReference Include="Mapster" Version="7.4.0"/>
+        <PackageReference Include="Mapster" Version="7.4.0" />
         <PackageReference Include="MediatR" Version="12.2.0"/>
         <PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="6.0.0"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.0"/>
@@ -31,7 +29,6 @@
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0"/>
         <PackageReference Include="Serilog.AspNetCore" Version="8.0.0"/>
         <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1"/>
-        <PackageReference Include="Serilog.Sinks.File" Version="5.0.0"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 

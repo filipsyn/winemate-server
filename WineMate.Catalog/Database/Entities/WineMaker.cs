@@ -1,3 +1,5 @@
+using WineMate.Contracts.Common;
+
 namespace WineMate.Catalog.Database.Entities;
 
 public class WineMaker : BaseEntity

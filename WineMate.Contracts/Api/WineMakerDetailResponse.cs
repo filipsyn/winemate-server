@@ -1,6 +1,6 @@
-using WineMate.Catalog.Database.Entities;
+using WineMate.Contracts.Common;
 
-namespace WineMate.Catalog.Contracts;
+namespace WineMate.Contracts.Api;
 
 public class WineMakerDetailResponse
 {

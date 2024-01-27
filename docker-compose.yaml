@@ -1,4 +1,9 @@
 version: '3'
+
+volumes:
+  winemate.catalog.database:
+  winemate.reviews.database:
+
 services: 
   winemate.catalog.app:
     container_name: "winemate-catalog-app"
@@ -21,6 +26,26 @@ services:
         - "8110:5432"
     volumes:
       - .containers/winemate.catalog.database/data:/var/lib/postgresql/data    
-
-volumes:
-  winemate.catalog.database:
+  
+  winemate.reviews.app:
+    container_name: "winemate-reviews-app"
+    build: 
+      context: .
+      dockerfile: WineMate.Reviews/Dockerfile
+    ports:
+      - "8200:8080"
+    depends_on:
+      - winemate.reviews.database
+  
+  winemate.reviews.database:
+    container_name: "winemate-reviews-database"
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=superuser
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=winemate_reviews
+    ports:
+        - "8210:5432"
+    volumes:
+      - .containers/winemate.reviews.database/data:/var/lib/postgresql/data
+      

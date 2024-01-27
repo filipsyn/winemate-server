@@ -10,11 +10,11 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
-using WineMate.Catalog.Contracts;
 using WineMate.Catalog.Database;
-using WineMate.Catalog.Database.Entities;
 using WineMate.Catalog.Extensions;
 using WineMate.Catalog.Validators;
+using WineMate.Contracts.Api;
+using WineMate.Contracts.Common;
 
 namespace WineMate.Catalog.Features.WineMakers;
 
