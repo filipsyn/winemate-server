@@ -13,11 +13,7 @@ public class CreateWineReviewRequestValidator : AbstractValidator<CreateWineRevi
             .NotEmpty();
 
         RuleFor(x => x.Title)
-            .NotEmpty()
             .MaximumLength(128);
-
-        RuleFor(x => x.Body)
-            .NotEmpty();
 
         RuleFor(x => x.Rating)
             .NotEmpty()
