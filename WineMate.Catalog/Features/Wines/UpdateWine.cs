@@ -90,6 +90,7 @@ public static class UpdateWine
             wine.Year = request.Year;
             wine.Type = request.Type;
             wine.WineMakerId = request.WineMakerId;
+            wine.UpdatedAt = DateTime.UtcNow;
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
