@@ -35,6 +35,7 @@ public static class GetWineMaker
         public async Task<ErrorOr<WineMakerDetailResponse>> Handle(Query request, CancellationToken cancellationToken)
         {
             var wineMaker = await _dbContext.WineMakers
+                .AsNoTracking()
                 .FirstOrDefaultAsync(wineMaker => wineMaker.Id == request.Id, cancellationToken);
 
             if (wineMaker is null)

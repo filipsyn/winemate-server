@@ -34,7 +34,9 @@ public static class GetWine
 
         public async Task<ErrorOr<WineDetailResponse>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var wine = await _dbContext.Wines.FirstOrDefaultAsync(wine => wine.Id == request.Id, cancellationToken);
+            var wine = await _dbContext.Wines
+                .AsNoTracking()
+                .FirstOrDefaultAsync(wine => wine.Id == request.Id, cancellationToken);
 
             if (wine is null)
             {

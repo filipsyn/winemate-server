@@ -25,6 +25,7 @@ public static class ListWineMakers
         public async Task<IList<WineMakerInfoResponse>> Handle(Query request, CancellationToken cancellationToken)
         {
             var winemakers = await _dbContext.WineMakers
+                .AsNoTracking()
                 .Select(wineMaker => new WineMakerInfoResponse
                 {
                     Id = wineMaker.Id,
