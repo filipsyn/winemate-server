@@ -2,6 +2,8 @@ using System.Text.Json.Serialization;
 
 using HealthChecks.UI.Client;
 
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -28,6 +30,8 @@ builder.Host.UseSerilog((context, configuration) =>
 });
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddFluentValidationRulesToSwagger();
+
 
 builder.Services.AddSwaggerGen(options =>
 {
