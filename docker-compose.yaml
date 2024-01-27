@@ -5,6 +5,14 @@ volumes:
   winemate.reviews.database:
 
 services: 
+  winemage.gateway:
+    container_name: "winemate-gateway"
+    build: 
+      context: .
+      dockerfile: WineMate.Gateway/Dockerfile
+    ports:
+      - "8000:8080"
+  
   winemate.catalog.app:
     container_name: "winemate-catalog-app"
     build: 
