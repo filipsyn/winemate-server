@@ -1,6 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+
 using Serilog;
 
+using WineMate.Reviews.Database;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Database"));
+});
 
 builder.Host.UseSerilog((context, configuration) =>
 {
