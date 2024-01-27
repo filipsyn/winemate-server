@@ -1,6 +1,9 @@
 using Carter;
+
 using MediatR;
+
 using Microsoft.EntityFrameworkCore;
+
 using WineMate.Catalog.Contracts;
 using WineMate.Catalog.Database;
 
