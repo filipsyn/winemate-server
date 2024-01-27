@@ -71,6 +71,8 @@ public static class CreateWine
 
             if (!validationResult.IsValid)
             {
+                _logger.LogWarning("Can't create wine, validation failed: {ValidationResult}",
+                    validationResult.ToString() ?? "Validation failed.");
                 return Error.Failure(nameof(CreateWine), validationResult.ToString() ?? "Validation failed.");
             }
 
