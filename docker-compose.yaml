@@ -56,6 +56,28 @@ services:
         - "8210:5432"
     volumes:
       - .containers/winemate.reviews.database/data:/var/lib/postgresql/data
+        
+  winemate.identity.app:
+    container_name: "winemate-identity-app"
+    build:
+      context: .
+      dockerfile: WineMate.Identity/Dockerfile
+    ports:
+      - "8300:8080"
+    depends_on:
+      - winemate.identity.database
+
+  winemate.identity.database:
+    container_name: "winemate-identity-database"
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=superuser
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=winemate_identity
+    ports:
+      - "8310:5432"
+    volumes:
+      - .containers/winemate.identity.database/data:/var/lib/postgresql/data
       
   winemate.rabbitmq:
     container_name: "winemate-rabbitmq"
