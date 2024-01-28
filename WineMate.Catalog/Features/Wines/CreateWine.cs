@@ -11,6 +11,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using WineMate.Catalog.Configuration;
+using WineMate.Catalog.Configuration.Policies;
 using WineMate.Catalog.Database;
 using WineMate.Catalog.Database.Entities;
 using WineMate.Common.Extensions;
@@ -129,6 +130,7 @@ public class CreateWineEndpoint : ICarterModule
                     error => error.ToResponse()
                 );
             })
+            .RequireAuthorization(Policies.IsAdmin)
             .WithOpenApi()
             .WithName("CreateWine")
             .WithSummary("Create Wine")

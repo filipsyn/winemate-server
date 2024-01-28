@@ -6,6 +6,7 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using WineMate.Catalog.Configuration.Policies;
 using WineMate.Catalog.Database;
 using WineMate.Common.Extensions;
 
@@ -68,6 +69,7 @@ public class DeleteWineMakerEndpoint : ICarterModule
                     errors => errors.ToResponse()
                 );
             })
+            .RequireAuthorization(Policies.IsAdmin)
             .WithOpenApi()
             .WithName("DeleteWineMaker")
             .WithSummary("Delete wine maker")
