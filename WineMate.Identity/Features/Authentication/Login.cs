@@ -85,6 +85,9 @@ public static class Login
                 return Error.Failure(nameof(Handler), "Incorrect credentials");
             }
 
+            user.LastLoginAt = DateTime.UtcNow;
+            await _dbContext.SaveChangesAsync(cancellationToken);
+
             var token = GenerateJwtToken(user);
 
             return new UserLoginResponse { Token = token };
