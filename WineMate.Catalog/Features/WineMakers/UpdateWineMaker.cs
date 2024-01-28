@@ -11,8 +11,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using WineMate.Catalog.Database;
-using WineMate.Catalog.Extensions;
 using WineMate.Catalog.Validators;
+using WineMate.Common.Extensions;
 using WineMate.Contracts.Api;
 using WineMate.Contracts.Common;
 

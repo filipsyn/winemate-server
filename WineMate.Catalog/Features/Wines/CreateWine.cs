@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using WineMate.Catalog.Configuration;
 using WineMate.Catalog.Database;
 using WineMate.Catalog.Database.Entities;
-using WineMate.Catalog.Extensions;
+using WineMate.Common.Extensions;
 using WineMate.Contracts.Api;
 using WineMate.Contracts.Common;
 
