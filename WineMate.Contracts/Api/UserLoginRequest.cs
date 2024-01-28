@@ -1,6 +1,6 @@
 namespace WineMate.Contracts.Api;
 
-public class LoginRequest
+public class UserLoginRequest
 {
     public string Email { get; set; }
     public string Password { get; set; }

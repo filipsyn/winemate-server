@@ -1,12 +1,12 @@
 using FluentValidation;
 
-using Microsoft.AspNetCore.Identity.Data;
+using WineMate.Contracts.Api;
 
 namespace WineMate.Identity.Validators;
 
-public class LoginRequestValidator : AbstractValidator<LoginRequest>
+public class UserLoginRequestValidator : AbstractValidator<UserLoginRequest>
 {
-    public LoginRequestValidator()
+    public UserLoginRequestValidator()
     {
         RuleFor(x => x.Email).NotEmpty().EmailAddress();
         RuleFor(x => x.Password).NotEmpty();

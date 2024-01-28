@@ -1,6 +1,6 @@
 namespace WineMate.Contracts.Api;
 
-public class LoginResponse
+public class UserLoginResponse
 {
     public string Token { get; set; }
 }
