@@ -61,7 +61,7 @@ public class GetWineEndpoint : ICarterModule
 
                 return result.MatchFirst(
                     TypedResults.Ok,
-                    error => Results.NotFound(error.ToResponse())
+                    error => error.ToResponse()
                 );
             })
             .WithOpenApi()
