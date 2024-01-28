@@ -104,6 +104,10 @@ app.MapHealthChecks("_health", new HealthCheckOptions
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
+app.UseSerilogRequestLogging();
+app.UseExceptionHandler();
+
+
 app.UseHttpsRedirection();
 
 app.Run();
