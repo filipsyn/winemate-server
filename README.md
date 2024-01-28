@@ -1,4 +1,4 @@
-# WineMate
+# WineMate 🍷
 
 > A server-side application for storing information about wines, their producers and your reviews
 
