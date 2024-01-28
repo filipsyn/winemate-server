@@ -22,6 +22,7 @@ services:
       - "8100:8080"
     depends_on:
       - winemate.catalog.database
+      - winemate.rabbitmq
   
   winemate.catalog.database:
     container_name: "winemate-catalog-database"
@@ -44,6 +45,7 @@ services:
       - "8200:8080"
     depends_on:
       - winemate.reviews.database
+      - winemate.rabbitmq
   
   winemate.reviews.database:
     container_name: "winemate-reviews-database"
@@ -66,6 +68,8 @@ services:
       - "8300:8080"
     depends_on:
       - winemate.identity.database
+      - winemate.rabbitmq
+
 
   winemate.identity.database:
     container_name: "winemate-identity-database"
