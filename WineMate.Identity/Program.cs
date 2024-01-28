@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
 
+using Carter;
+
 using FluentValidation;
 
 using HealthChecks.UI.Client;
@@ -22,6 +24,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+
+builder.Services.AddCarter();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -107,6 +111,7 @@ app.MapHealthChecks("_health", new HealthCheckOptions
 app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
 
+app.MapCarter();
 
 app.UseHttpsRedirection();
 
