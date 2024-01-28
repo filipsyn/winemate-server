@@ -70,6 +70,7 @@ services:
       - winemate.identity.database
       - winemate.rabbitmq
 
+
   winemate.identity.database:
     container_name: "winemate-identity-database"
     image: postgres:alpine
