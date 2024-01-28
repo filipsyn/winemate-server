@@ -1,4 +1,8 @@
+using FluentValidation;
+
 using MassTransit;
+
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -45,6 +49,10 @@ builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(assembly);
 });
+
+builder.Services.AddValidatorsFromAssembly(assembly);
+builder.Services.AddFluentValidationRulesToSwagger();
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
