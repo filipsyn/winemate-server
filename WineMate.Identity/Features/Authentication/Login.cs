@@ -101,8 +101,8 @@ public static class Login
             };
 
             var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_configuration.GetSection("Token").Value
-                                       ?? throw new InvalidOperationException("Token is not configured"))
+                Encoding.UTF8.GetBytes(_configuration.GetSection("JwtSettings:Key").Value
+                                       ?? throw new InvalidOperationException("Key is not configured"))
             );
 
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
