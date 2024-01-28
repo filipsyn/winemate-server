@@ -8,6 +8,7 @@ using Mapster;
 
 using MediatR;
 
+using WineMate.Catalog.Configuration.Policies;
 using WineMate.Catalog.Database;
 using WineMate.Catalog.Database.Entities;
 using WineMate.Catalog.Validators;
@@ -93,6 +94,7 @@ public class CreateWineMakerEndpoint : ICarterModule
                     wineMakerId => Results.Created($"/winemakers/{wineMakerId}", wineMakerId),
                     error => error.ToResponse());
             })
+            .RequireAuthorization(Policies.IsAdmin)
             .WithOpenApi()
             .WithName("CreateWineMaker")
             .WithSummary("Create wine maker")

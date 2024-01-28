@@ -11,6 +11,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using WineMate.Catalog.Configuration;
+using WineMate.Catalog.Configuration.Policies;
 using WineMate.Catalog.Database;
 using WineMate.Common.Extensions;
 using WineMate.Contracts.Api;
@@ -128,6 +129,7 @@ public class UpdateWineEndpoint : ICarterModule
                         error => error.ToResponse());
                 }
             )
+            .RequireAuthorization(Policies.IsAdmin)
             .WithOpenApi()
             .WithName("UpdateWine")
             .WithSummary("Update Wine")
