@@ -40,3 +40,11 @@ Application is composed of the following services. Here's how you can access the
 | Identity    | `:8300`  |
 
 ![Infrastructure of application](./docs/assets/infrastructure.png)
+
+## Used technologies
+- .NET 8.0
+- Entity Framework Core - ORM
+- PostgreSQL - Database
+- Docker - Containerization
+- RabbitMQ - Message broker
+- YARP - API Gateway
