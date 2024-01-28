@@ -24,7 +24,12 @@ public class GetUserAdminStatusConsumer : IConsumer<GetUserAdminStatusRequest>
 
         if (user is null)
         {
-            await context.RespondAsync(new UserNotFoundResponse { UserId = context.Message.UserId });
+            await context.RespondAsync(new GetUserAdminStatusResponse
+            {
+                UserId = context.Message.UserId,
+                Exists = false,
+                IsAdmin = false
+            });
             return;
         }
 
