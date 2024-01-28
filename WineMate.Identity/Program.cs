@@ -2,6 +2,8 @@ using MassTransit;
 
 using Microsoft.EntityFrameworkCore;
 
+using Serilog;
+
 using WineMate.Identity.Database;
 using WineMate.Identity.Middleware;
 
@@ -31,11 +33,20 @@ builder.Services.AddMassTransit(busConfigurator =>
     });
 });
 
+builder.Host.UseSerilog((context, configuration) =>
+{
+    configuration.ReadFrom.Configuration(context.Configuration);
+    configuration.WriteTo.Console();
+});
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseSerilogRequestLogging();
+
 
 app.UseSwagger();
 app.UseSwaggerUI();
