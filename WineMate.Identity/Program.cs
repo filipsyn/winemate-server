@@ -1,9 +1,12 @@
 using FluentValidation;
 
+using HealthChecks.UI.Client;
+
 using MassTransit;
 
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -71,6 +74,10 @@ builder.Services.AddSwaggerGen(options =>
         });
 });
 
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("Database") ??
+               throw new InvalidOperationException("Database connection string is not configured."));
+
 var app = builder.Build();
 
 app.UseSerilogRequestLogging();
@@ -81,6 +88,11 @@ app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
     options.RoutePrefix = string.Empty;
+});
+
+app.MapHealthChecks("_health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
 app.UseHttpsRedirection();
