@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.Json.Serialization;
 
 using Carter;
@@ -10,13 +11,18 @@ using MassTransit;
 
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 using Serilog;
 
+using Swashbuckle.AspNetCore.Filters;
+
 using WineMate.Identity.Database;
+using WineMate.Identity.Features.Authorization;
 using WineMate.Identity.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +41,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.SetKebabCaseEndpointNameFormatter();
+
+    busConfigurator.AddConsumer<GetUserAdminStatusConsumer>();
+
     busConfigurator.UsingRabbitMq((context, configurator) =>
     {
         configurator.Host(new Uri(builder.Configuration["MessageBroker:Host"]!), host =>
@@ -64,6 +73,21 @@ builder.Services.AddValidatorsFromAssembly(assembly);
 builder.Services.AddFluentValidationRulesToSwagger();
 
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey =
+                new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]
+                                           ?? throw new InvalidOperationException("Key is not configured"))),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
+builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -78,6 +102,14 @@ builder.Services.AddSwaggerGen(options =>
                 Url = new Uri("https://github.com/filipsyn/winemate-server")
             }
         });
+
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
 builder.Services.AddHealthChecks()
@@ -110,6 +142,11 @@ app.MapHealthChecks("_health", new HealthCheckOptions
 
 app.UseSerilogRequestLogging();
 app.UseExceptionHandler();
+
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapCarter();
 
