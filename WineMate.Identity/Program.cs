@@ -1,8 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 
 using WineMate.Identity.Database;
+using WineMate.Identity.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
