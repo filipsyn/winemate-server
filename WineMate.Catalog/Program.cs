@@ -1,3 +1,4 @@
+using System.Text;
 using System.Text.Json.Serialization;
 
 using Carter;
@@ -10,12 +11,20 @@ using MassTransit;
 
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 using Serilog;
 
+using Swashbuckle.AspNetCore.Filters;
+
+using WineMate.Catalog.Configuration.Policies;
+using WineMate.Catalog.Configuration.Policies.Handlers;
+using WineMate.Catalog.Configuration.Policies.Requirements;
 using WineMate.Catalog.Database;
 using WineMate.Catalog.Features.Wines;
 using WineMate.Catalog.Middleware;
@@ -84,10 +93,44 @@ builder.Services.AddSwaggerGen(options =>
                 Url = new Uri("https://github.com/filipsyn/winemate-server")
             }
         });
+
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey =
+                new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]
+                                           ?? throw new InvalidOperationException("Key is not configured"))),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(Policies.IsAdmin, policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.Requirements.Add(new IsAdminRequirement());
+    });
+});
+
+builder.Services.AddScoped<IAuthorizationHandler, IsAdminHandler>();
 
 builder.Host.UseSerilog((context, configuration) =>
 {
@@ -97,6 +140,9 @@ builder.Host.UseSerilog((context, configuration) =>
 
 var app = builder.Build();
 
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>
