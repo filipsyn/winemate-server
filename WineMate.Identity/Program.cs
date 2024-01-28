@@ -1,3 +1,5 @@
+using MassTransit;
+
 using Microsoft.EntityFrameworkCore;
 
 using WineMate.Identity.Database;
@@ -12,6 +14,21 @@ builder.Services.AddProblemDetails();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database"));
+});
+
+builder.Services.AddMassTransit(busConfigurator =>
+{
+    busConfigurator.SetKebabCaseEndpointNameFormatter();
+    busConfigurator.UsingRabbitMq((context, configurator) =>
+    {
+        configurator.Host(new Uri(builder.Configuration["MessageBroker:Host"]!), host =>
+        {
+            host.Username(builder.Configuration["MessageBroker:Username"]!);
+            host.Password(builder.Configuration["MessageBroker:Password"]!);
+        });
+
+        configurator.ConfigureEndpoints(context);
+    });
 });
 
 
