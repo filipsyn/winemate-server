@@ -9,7 +9,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 using WineMate.Catalog.Database;
-using WineMate.Catalog.Extensions;
+using WineMate.Common.Extensions;
 using WineMate.Contracts.Api;
 
 namespace WineMate.Catalog.Features.WineMakers;

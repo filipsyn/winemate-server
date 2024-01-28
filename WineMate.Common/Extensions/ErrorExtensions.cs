@@ -1,6 +1,8 @@
 using ErrorOr;
 
-namespace WineMate.Reviews.Extensions;
+using Microsoft.AspNetCore.Http;
+
+namespace WineMate.Common.Extensions;
 
 public static class ErrorExtensions
 {

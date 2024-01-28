@@ -8,9 +8,9 @@ using MediatR;
 
 using Microsoft.EntityFrameworkCore;
 
+using WineMate.Common.Extensions;
 using WineMate.Contracts.Api;
 using WineMate.Reviews.Database;
-using WineMate.Reviews.Extensions;
 
 namespace WineMate.Reviews.Features.WineReviews;
 

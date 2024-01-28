@@ -10,12 +10,12 @@ using MassTransit;
 
 using MediatR;
 
+using WineMate.Common.Extensions;
 using WineMate.Contracts.Api;
 using WineMate.Contracts.Messages;
 using WineMate.Reviews.Configuration;
 using WineMate.Reviews.Database;
 using WineMate.Reviews.Database.Entities;
-using WineMate.Reviews.Extensions;
 
 namespace WineMate.Reviews.Features.WineReviews;
 
