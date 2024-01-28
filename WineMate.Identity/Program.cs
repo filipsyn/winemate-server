@@ -22,6 +22,7 @@ using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 
 using WineMate.Identity.Database;
+using WineMate.Identity.Features.Authorization;
 using WineMate.Identity.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,6 +41,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddMassTransit(busConfigurator =>
 {
     busConfigurator.SetKebabCaseEndpointNameFormatter();
+
+    busConfigurator.AddConsumer<GetUserAdminStatusConsumer>();
+
     busConfigurator.UsingRabbitMq((context, configurator) =>
     {
         configurator.Host(new Uri(builder.Configuration["MessageBroker:Host"]!), host =>
